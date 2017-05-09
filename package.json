@@ -2,6 +2,7 @@
   "name": "react-native-app-with-web",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "devDependencies": {
     "add-asset-html-webpack-plugin": "^2.0.1",
     "babel-jest": "19.0.0",
