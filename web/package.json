@@ -1,0 +1,53 @@
+{
+  "name": "react-native-app-only-web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "add-asset-html-webpack-plugin": "^2.0.1",
+    "babel-jest": "19.0.0",
+    "babel-loader": "^7.0.0",
+    "babel-preset-react-native": "1.9.1",
+    "compression-webpack-plugin": "^0.4.0",
+    "copy-webpack-plugin": "^4.0.1",
+    "cross-env": "^4.0.0",
+    "html-webpack-plugin": "^2.28.0",
+    "http-serve": "^1.0.1",
+    "npm-run-all": "^4.0.2",
+    "offline-plugin": "^4.7.0",
+    "rimraf": "^2.6.1",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.4.1",
+    "webpack-dev-server": "^2.4.2",
+    "cpx": "^1.5.0",
+    "cross-env": "^5.0.0",
+    "npm-run-all": "^4.0.2",
+    "babel-preset-expo": "^1.0.1",
+    "rimraf": "^2.6.1"
+  },
+  "scripts": {
+    "web:build:vendor-dev:build": "cross-env NODE_ENV=development webpack --config vendor.webpack.config.js",
+    "web:build:vendor-dev": "npm-run-all web:clean:vendor-dev web:copy:src web:build:vendor-dev:build web:clean:vendor-dev",
+    "web:dev:server:devserver": "cross-env NODE_ENV=development webpack-dev-server -d --host 0.0.0.0 --port 3000 --config webpack.config.js --inline --hot --colors",
+    "web:dev:server:copy": "npm-run-all web:clean:src web:copy:src:watch",
+    "web:dev:server": "npm-run-all --parallel web:dev:server:*",
+    "web": "npm-run-all web:build:vendor-dev web:clean:src web:dev:server",
+    "web:copy:src": "cpx ../src/**/*.js ./src",
+    "web:copy:src:watch": "cpx ../src/**/*.js ./src --watch",
+    "web:clean:vendor": "rimraf vendor",
+    "web:clean:vendor-dev": "rimraf build",
+    "web:clean:src": "rimraf src",
+    "web:clean": "npm-run-all web:clean:*",
+    "web:build:vendor:build": "cross-env NODE_ENV=production webpack --config vendor.webpack.config.js",
+    "web:build:vendor": "npm-run-all web:clean:vendor web:build:vendor:build",
+    "web:build:app:build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "web:build:app": "npm-run-all web:clean:src web:clean:vendor-dev web:copy:src web:build:app:build",
+    "web:build": "npm-run-all web:build:vendor web:build:app",
+    "web:serve": "http-serve -p 3001 --gzip true ./build"
+  },
+  "dependencies": {
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-native-web": "0.0.94"
+  }
+}

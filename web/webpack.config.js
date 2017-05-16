@@ -46,7 +46,7 @@ const plugins = [
   }),
   new HtmlWebpackPlugin({
     filename: 'index.html',
-    template: 'web/templates/index.ejs',
+    template: './templates/index.ejs',
   }),
   new AddAssetHtmlPlugin(addAssetHtmlFiles),
 
@@ -76,7 +76,7 @@ module.exports = {
     contentBase: outputPath,
   },
   entry: {
-    app: path.join(__dirname, '../index.web.js')
+    app: path.join(__dirname, './index.web.js')
   },
   module: {
     loaders: [
