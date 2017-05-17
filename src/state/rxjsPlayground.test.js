@@ -1,7 +1,7 @@
 import Rx from "rxjs";
 
 const logHelper = (logEnabled, callback) => {
-    var altConsole = {
+    let altConsole = {
         log: (text) => {
             logEnabled && console.log(text);
         }
@@ -12,17 +12,17 @@ describe("rx playground", () => {
     it("fromArray", () => {
 
         logHelper(false, (console) => {
-            var a = [1, 2, 3];
+            let a = [1, 2, 3];
 
-            var source = Rx.Observable.from(a);
-            var mapped = source.map((x) => {
+            let source = Rx.Observable.from(a);
+            let mapped = source.map((x) => {
                 consoleLog(`map x ${x}`);
                 return x + 10;
             });
 
             console.log(`pre subscribe`);
 
-            var i = 0;
+            let i = 0;
             mapped.subscribe((x) => {
                 console.log(`next ${x}`);
                 expect(x).toEqual(a[i] + 10);
@@ -39,28 +39,28 @@ describe("rx playground", () => {
     it("publishReplay", () => {
 
         logHelper(false, (console) => {
-            var a = [1, 2, 3, 4];
+            let a = [1, 2, 3, 4];
 
-            var source = new Rx.Subject();
+            let source = new Rx.Subject();
 
-            var mapped = source.map((x) => {
+            let mapped = source.map((x) => {
                 console.log(`map x ${x}`);
                 return x + 10;
             });
 
             console.log("pre published");
 
-            var published = mapped.publishReplay(1);
+            let published = mapped.publishReplay(1);
 
             console.log("post published");
 
-            var refCounted = published.refCount();
+            let refCounted = published.refCount();
 
             a.forEach((v) => {
                 source.next(v);
             });
 
-            var i = 0;
+            let i = 0;
             refCounted.subscribe((x) => {
                 console.log(`next ${x}`);
                 expect(x).toEqual(a[i] + 10);
@@ -86,6 +86,43 @@ describe("rx playground", () => {
 
             source.complete();
 
+
+        });
+
+    });
+
+    it("merge", () => {
+
+        logHelper(false, (console) => {
+            let state = { v1: 1 };
+
+            let source0 = new Rx.Subject();
+            let source1 = new Rx.Subject();
+
+            let map0 = source0.map(h => state => {
+                console.log(`state ${JSON.stringify(state)}`);
+                console.log(`h ${JSON.stringify(h)}`);
+                return ({ ...state, v0: (state.v0 || 0) + h.v * 1});
+            });
+            let map1 = source1.map(h => state =>
+                ({ ...state, v1: (state.v1 || 0) + h.v * 2}));
+
+            let merged = Rx.Observable.of(state).merge(
+                map0,
+                map1,
+            ).scan((state, reducer) => {
+                console.log("reduce h");
+                console.log("  " + JSON.stringify(reducer(state)));
+                return reducer(state);
+            });
+
+            merged.subscribe((x) => {
+                console.log("merged");
+                console.log("  " + JSON.stringify(x));
+            });
+
+            map0.next({ v: 1});
+            map1.next({ v: 2});
 
         });
 
