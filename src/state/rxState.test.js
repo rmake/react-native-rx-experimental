@@ -1,5 +1,5 @@
 
-import { createState } from "./RxState";
+import { createState } from "./rxState";
 import Rx from "rxjs";
 
 describe("RxState", () => {
@@ -11,6 +11,7 @@ describe("RxState", () => {
         const state$ = createState(rootReducer$, Rx.Observable.of({ counter: 10 }));
 
         add$.next(1);
+
         state$.toArray().subscribe((results) => {
             expect(results).toEqual([
                 { counter: 10 },
