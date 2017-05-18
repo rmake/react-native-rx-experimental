@@ -128,4 +128,36 @@ describe("rx playground", () => {
 
     });
 
+    it("reducer like", () => {
+
+        logHelper(false, (console) => {
+            let subject$ = new Rx.Subject();
+            let reducer$ = Rx.Observable.of(() => ({name: "test"})).merge(
+                subject$.map(payload => state => {
+                    console.log("reducer");
+                    console.log(JSON.stringify(payload));
+                    console.log(JSON.stringify(state));
+                    return state;
+                }),
+            );
+
+            reducer$.subscribe((reducer) => {
+                var result = reducer();
+                console.log("result");
+                console.log(JSON.stringify(result));
+            });
+
+
+            subject$.next({name: "aaa"});
+
+            Rx.Observable.of(() => ({name: "test"})).subscribe((x) => {
+                console.log("x");
+                console.log(x);
+                console.log(JSON.stringify(x()));
+            });
+
+        });
+
+    });
+
 });
