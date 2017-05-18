@@ -9,4 +9,12 @@ export default createActions([
         name: "toggleTodo",
         message: (id) => ({ id }),
     },
+    {
+        name: "removeTodo",
+        message: (id) => ({ id }),
+    },
+    {
+        name: "clearTodo",
+        message: () => ({}),
+    },
 ]);

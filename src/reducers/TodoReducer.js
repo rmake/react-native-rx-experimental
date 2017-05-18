@@ -22,6 +22,10 @@ export const toggleTodo = (todo, id) => {
     };
 };
 
+export const removeTodo = (todos, id) => {
+    return todos.filter(todo => todo.id != id);
+};
+
 const TodoReducer$ = Rx.Observable.of(() => initialState).merge(
     todoActions.addTodo.subject$.map(payload => state => {
         return ({
@@ -36,6 +40,14 @@ const TodoReducer$ = Rx.Observable.of(() => initialState).merge(
     todoActions.toggleTodo.subject$.map(payload => state => ({
         ...state,
         todos: state.todos.map((todo) => (toggleTodo(todo, payload.id))),
+    })),
+    todoActions.removeTodo.subject$.map(payload => state => ({
+        ...state,
+        todos: removeTodo(state.todos, payload.id),
+    })),
+    todoActions.clearTodo.subject$.map(payload => state => ({
+        ...state,
+        todos: [],
     })),
 );
 

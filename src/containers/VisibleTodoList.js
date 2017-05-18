@@ -22,7 +22,7 @@ const mapStateToProps = (state) => {
     return ({
         todos: getVisibleTodos(state.todos.todos, state.visibilityFilter.filter),
         onTodoClick: (id) => { todoActions.toggleTodo.send(id); },
-        onRemoveTodoClick: (id) => { todoActions.toggleTodo.send(id); },
+        onRemoveTodoClick: (id) => { todoActions.removeTodo.send(id); },
     });
 };
 
