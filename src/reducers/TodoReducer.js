@@ -35,7 +35,7 @@ const TodoReducer$ = Rx.Observable.of(() => initialState).merge(
     }),
     todoActions.toggleTodo.subject$.map(payload => state => ({
         ...state,
-        todos: state.todos.map((todo) => (toggleTodo(todo, action.id))),
+        todos: state.todos.map((todo) => (toggleTodo(todo, payload.id))),
     })),
 );
 

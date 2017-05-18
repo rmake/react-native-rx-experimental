@@ -7,20 +7,52 @@ describe("todos", () => {
     });
 
     it("addTodo", () => {
-        let state = null;
-        TodoReducer$.take(2).toArray().subscribe((reducers) => {
-            reducers.forEach(reducer => state = reducer(state));
+        TodoReducer$.take(3).toArray().subscribe((reducers) => {
+            let state = reducers.reduce((state, reducer) => reducer(state), () => {});
             expect(state).toEqual({
-                "nextTodoId":2,
-                "todos":[{
-                    "id":1,
-                    "text":"task",
-                    "completed":false
-                }]
+                "nextTodoId": 3,
+                "todos":[
+                    {
+                        "id": 1,
+                        "text": "task",
+                        "completed": false,
+                    },
+                    {
+                        "id": 2,
+                        "text": "new task",
+                        "completed": false,
+                    },
+                ]
             });
         });
 
         todoActions.addTodo.send("task");
+        todoActions.addTodo.send("new task");
+    });
+
+    it("toggleTodo", () => {
+        TodoReducer$.take(4).toArray().subscribe((reducers) => {
+            let state = reducers.reduce((state, reducer) => reducer(state), () => {});
+            expect(state).toEqual({
+                "nextTodoId": 3,
+                "todos":[
+                    {
+                        "id": 1,
+                        "text": "task",
+                        "completed": true,
+                    },
+                    {
+                        "id": 2,
+                        "text": "new task",
+                        "completed": false,
+                    },
+                ]
+            });
+        });
+
+        todoActions.addTodo.send("task");
+        todoActions.addTodo.send("new task");
+        todoActions.toggleTodo.send(1);
     });
 
 });
