@@ -7,7 +7,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 export const connect = (selector = state => state) => {
-    console.log("connect");
     return (WrappedComponent) => {
         return class Connect extends Component {
             static contextTypes = {
@@ -17,9 +16,8 @@ export const connect = (selector = state => state) => {
             subscription = null;
 
             componentWillMount() {
-                console.log("connect componentWillMount");
                 this.subscription = this.context.state$.
-                    map(selector).subscribe(state => this.setState(state));
+                    map((state) => selector(state, this.props) ).subscribe(state => this.setState(state));
             }
 
             componentWillUnmount() {

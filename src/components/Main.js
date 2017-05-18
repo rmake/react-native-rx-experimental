@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { StyleSheet, Text, View, Dimensions, Platform } from "react-native";
 import AddTodo from "../containers/AddTodo";
 import VisibleTodoList from "../containers/VisibleTodoList";
+import Footer from "./Footer";
 
 const Main = ({ match , storage }) => {
     return (
@@ -15,10 +16,11 @@ const Main = ({ match , storage }) => {
 
             <AddTodo />
             <VisibleTodoList />
+            <Footer />
             {
                 //
                 //
-                //<Footer />
+                //
             }
 
         </View>

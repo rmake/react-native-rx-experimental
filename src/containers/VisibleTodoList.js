@@ -20,7 +20,7 @@ const getVisibleTodos = (todos, filter) => {
 
 const mapStateToProps = (state) => {
     return ({
-        todos: getVisibleTodos(state.todos.todos, "SHOW_ALL"),
+        todos: getVisibleTodos(state.todos.todos, state.visibilityFilter.filter),
         onTodoClick: (id) => { todoActions.toggleTodo.send(id); },
         onRemoveTodoClick: (id) => { todoActions.toggleTodo.send(id); },
     });
