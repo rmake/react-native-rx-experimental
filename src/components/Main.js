@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, Text, View, Dimensions, Platform } from "react-native";
+import AddTodo from "../containers/AddTodo";
+import VisibleTodoList from "../containers/VisibleTodoList";
 
 const Main = ({ match , storage }) => {
     return (
@@ -10,9 +12,12 @@ const Main = ({ match , storage }) => {
                     Todo App.
                 </Text>
             </View>
+
+            <AddTodo />
+            <VisibleTodoList />
             {
-                //<AddTodo />
-                //<VisibleTodoList />
+                //
+                //
                 //<Footer />
             }
 

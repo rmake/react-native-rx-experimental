@@ -1,7 +1,7 @@
 import React from "react";
 import { Text } from "react-native";
 import { createState } from "./state/rxState";
-import { RxStateProvider } from "./state/RxStateComponent";
+import { RxStateProvider } from "./state/rxStateComponent";
 import { StyleSheet } from 'react-native';
 import Main from "./components/Main"
 import reducer$ from "./reducers";

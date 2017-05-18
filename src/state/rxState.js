@@ -31,14 +31,13 @@ export const createSelector = (state, path, merge = state => state) => {
 }
 
 export const createState = (reducer$, initialState$ = Rx.Observable.of({})) => {
-    return initialState$.merge(reducer$)
-        //.scan((state, [scope, reducer]) => ({
-        //    ...state, [scope]: reducer(state[scope])
-        //}))
+    let state$ = initialState$.merge(reducer$)
         .scan((state, [path, reducer]) => {
             var { divide, merge } = createSelector(state, path);
             return merge(reducer(divide(state)));
         })
         .publishReplay(1)
         .refCount();
+    state$.subscribe((x) => {});
+    return state$;
 }
