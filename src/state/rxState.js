@@ -4,7 +4,7 @@
 
 import Rx from "rxjs";
 
-export const createAction = (messageCallback, name) => {
+export const createAction = (name, messageCallback) => {
     var subject$ = new Rx.Subject();
     return {
         send: (...args) => {
@@ -13,9 +13,7 @@ export const createAction = (messageCallback, name) => {
             subject$.next(message);
         },
         handler: (callback) => {
-            console.log("handler ");
             return subject$.map(payload => {
-                console.log("payload ", payload);
                 return [
                     payload,
                     callback(payload),
@@ -27,7 +25,7 @@ export const createAction = (messageCallback, name) => {
 };
 
 export const createActions = (actions) => {
-    return actions.reduce((acc, {name, message}) => ({ ...acc, [name]: createAction(message, name) }), {})
+    return actions.reduce((acc, {name, message}) => ({ ...acc, [name]: createAction(name, message) }), {})
 }
 
 export const createSelector = (state, path, merge = state => state) => {
@@ -47,39 +45,27 @@ export const createState = (reducer$, middlewares = [], initialState$ = Rx.Obser
     middlewares.reverse();
 
     let state$ = initialState$.merge(reducer$)
-        .scan((state, reducers) => {
+        .scan((state, pair) => {
 
-            let update = () => {
-                reducers.forEach(pair => {
-                    console.log(pair);
-                    let [path, binder] = pair;
-                    console.log("binder ", binder);
-                    let [payload, reducer] = binder;
-                    console.log("payload ", payload);
-                    console.log("reducer ", reducer);
-                    let { divide, merge } = createSelector(state, path);
-                    state = merge(reducer(divide(state)));
-                });
+            let [path, binder] = pair;
+            let [payload, reducer] = binder;
+            let dispatch = _payload => {
+                let { divide, merge } = createSelector(state, path);
+                state = merge(reducer(divide(state)));
             };
 
-            console.log("reducers ", reducers);
+            if (payload) {
+                middlewares.forEach(middleware => {
+                    dispatch = middleware(state)(dispatch);
+                });
+            }
 
-            let payload = reducers[0][1][0];
-
-            console.log("___ ", reducers);
-
-            middlewares.forEach(middleware => {
-                update = middleware(state$)(update);
-            });
-
-            update();
-
-            console.log("post update ", state);
+            dispatch(payload);
 
             return state;
         })
         .publishReplay(1)
         .refCount();
-    state$.subscribe((x) => { console.log("x ", x); });
+    state$.subscribe((x) => { });
     return state$;
 }

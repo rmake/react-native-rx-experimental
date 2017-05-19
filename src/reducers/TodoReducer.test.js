@@ -9,7 +9,6 @@ describe("todos", () => {
     it("addTodo", () => {
         TodoReducer$.take(3).toArray().subscribe((reducers) => {
             let state = reducers.reduce((state, reducer) => reducer[1](state), () => {});
-            console.log("state ", state)
             expect(state).toEqual({
                 "nextTodoId": 3,
                 "todos":[
