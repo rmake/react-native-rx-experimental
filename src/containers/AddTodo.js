@@ -42,6 +42,7 @@ var styles = StyleSheet.create({
     textInput: {
         borderColor: '#777',
         borderWidth: 2,
+        height: 30,
     }
 });
 
