@@ -17,4 +17,38 @@ export default createActions([
         name: "clearTodo",
         message: () => ({}),
     },
+
+    {
+        name: "checkInitialTodos",
+        message: () => ({}),
+    },
+    {
+        name: "loadTodos",
+        message: () => ({}),
+    },
+    {
+        name: "loadTodosSuccess",
+        message: (todos) => ({todos}),
+    },
+    {
+        name: "loadTodosNoData",
+        message: () => ({}),
+    },
+    {
+        name: "loadTodosFailed",
+        message: (error) => ({error}),
+    },
+    {
+        name: "saveTodos",
+        message: (todos) => ({todos}),
+    },
+    {
+        name: "saveTodosSuccess",
+        message: () => ({}),
+    },
+    {
+        name: "saveTodosFailed",
+        message: (error) => ({error}),
+    },
+
 ]);

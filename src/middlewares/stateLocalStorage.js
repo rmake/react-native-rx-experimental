@@ -1,19 +1,19 @@
-import { loadTodos, saveTodos } from "../actions";
+import todoActions from "../actions/todoActions";
 
-const stateLocalStorage = store => next => action => {
+const stateLocalStorage = getState => next => payload => {
 
-    var previousState = store.getState();
+    var previousState = getState();
 
-    next(action);
+    next(payload);
 
-    var currentState = store.getState();
+    var currentState = getState();
 
-    if (action.type == "CHECK_INITIAL_TODOS") {
-        store.dispatch(loadTodos());
+    if (payload.type == todoActions.checkInitialTodos.name) {
+        todoActions.loadTodos.send();
     }
-    else if (action.type != "LOAD_TODOS_SUCCESS" &&
+    else if (payload.type != todoActions.loadTodosSuccess &&
         previousState.todos !== currentState.todos) {
-        store.dispatch(saveTodos(currentState.todos));
+        todoActions.saveTodos.send(currentState.todos);
     }
 
 };

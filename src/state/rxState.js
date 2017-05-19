@@ -20,6 +20,7 @@ export const createAction = (name, messageCallback) => {
                 ]
             });
         },
+        name,
         subject$,
     };
 };
@@ -53,10 +54,13 @@ export const createState = (reducer$, middlewares = [], initialState$ = Rx.Obser
                 let { divide, merge } = createSelector(state, path);
                 state = merge(reducer(divide(state)));
             };
+            let getState = () => {
+                return state;
+            }
 
             if (payload) {
                 middlewares.forEach(middleware => {
-                    dispatch = middleware(state)(dispatch);
+                    dispatch = middleware(getState)(dispatch);
                 });
             }
 

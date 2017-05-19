@@ -29,9 +29,12 @@ describe("RxState", () => {
         const add = createAction("add", (count) => ({count}));
         const counterReducer$ = add.handler(payload => state => state + payload.count );
         const rootReducer$ = Rx.Observable.merge(counterReducer$.map(counter => [["counter"], counter]));
-        const middleware = state => next => payload => {
+        const middleware = getState => next => payload => {
             expect(payload.type).toEqual("add");
-            next();
+            let oldState = getState();
+            next(payload);
+            let newState = getState();
+            expect(oldState).not.toEqual(newState);
         };
         const state$ = createState(rootReducer$, [middleware], Rx.Observable.of({ counter: 10 }));
 

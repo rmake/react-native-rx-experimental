@@ -49,6 +49,7 @@ const TodoReducer$ = Rx.Observable.of([null, () => initialState]).merge(
         ...state,
         todos: [],
     })),
+    todoActions.loadTodosSuccess.handler(payload => state => payload.todos),
 );
 
 export default TodoReducer$;

@@ -17,6 +17,7 @@ let AddTodo = ({ onSubmit }) => {
                         (event) => {
                             onSubmit(event.nativeEvent.text);
                             input.clear();
+
                         }
                     }
                 />
@@ -26,7 +27,10 @@ let AddTodo = ({ onSubmit }) => {
 };
 
 var mapStateToProps = (state) => ({
-    onSubmit: (text) => { todoActions.addTodo.send(text); }
+    onSubmit: (text) => {
+        todoActions.addTodo.send(text);
+        todoActions.loadTodos.send();
+    }
 });
 
 AddTodo = connect(mapStateToProps)(AddTodo);
